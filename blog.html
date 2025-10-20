@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+  Blog page containing posts about videogames. Each post is an
+  <article> element with clear headings and summaries. The use of
+  semantic tags makes the structure easy to parse for screen readers.
+  Consistent navigation across pages supports cognitive wayfinding
+  abilities for diverse users【716638492286674†L270-L277】【658675121105025†L194-L205】.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog – Student Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="logo">Jo&nbsp;Mohan</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visualizations.html">Visualizations</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="graph.html">Knowledge Graph</a></li>
+      </ul>
+
+      </ul>
+    </nav>
+  </header>
+  <main class="container fade-in">
+    <h1><i>Degrees of Freedom</i> </h1>
+    <p>
+      This blog explores my passion for videogames primarily focusing on the mathematics of game design as well as game spotlights.
+    </p>
+    <article class="card interactive" aria-labelledby="post3-title">
+      <h2 id="post3-title">An Exploration on the Math of Procedural Generation</h2>
+      <p>
+        In this post, I dive into the mathematical principles behind procedural generation in video games. My research focuses on Perlin noise and fractals, exploring how these concepts are applied to create expansive game worlds.
+      </p>
+      <div class="chip-wrapper">
+        <a href="#" class="read-more" aria-label="Read more about Journey">Read more…</a>
+      </div>
+    </article>
+        <article class="card interactive" aria-labelledby="post3-title">
+      <h2 id="post3-title">Bezier Curves: Splines and Their Usecases</h2>
+      <p>
+        Bezier curves are fundamental in computer graphics and game design for creating smooth and scalable shapes. This post explores their mathematical foundations, practical applications in game development, and how they enhance visual aesthetics.
+      </p>
+      <div class="chip-wrapper">
+        <a href="#" class="read-more" aria-label="Read more about Journey">Read more…</a>
+      </div>
+    </article>
+  </main>
+  <footer>
+    <p>&copy; 2025 Jo Mohan. All rights reserved.</p>
+  </footer>
+  <script src="scripts.js"></script>
+</body>
+</html>

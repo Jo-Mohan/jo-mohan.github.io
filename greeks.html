@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option Greeks Explorer – Student Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 12px 0 6px;
+    }
+    .control.card { padding: 14px; }
+    .control label { display:block; font-weight:600; margin-bottom:6px; }
+    .row { display:flex; align-items:center; gap:10px; }
+    .row input[type="range"] { width:100%; }
+    .value { min-width:64px; text-align:right; font-variant-numeric: tabular-nums; color: var(--muted, #6b7280); }
+    .pill {
+      display:inline-flex; gap:6px; align-items:center;
+      border:1px solid var(--ring, #e5e7eb); border-radius:999px; padding:6px 10px; background:var(--card,#fff);
+    }
+    .metrics {
+      display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+      margin-top:14px;
+    }
+    .metric.card { padding:14px; }
+    .metric h3 { margin:0 0 4px; font-size:0.95rem; color:var(--muted,#6b7280); }
+    .metric .num { font-weight:700; font-size:1.2rem; font-variant-numeric: tabular-nums; }
+    canvas { background: var(--card, #fff); border:1px solid var(--ring, #e5e7eb); border-radius:16px; box-shadow: 0 10px 20px rgba(17,24,39,0.06); }
+
+    /* back chip */
+    .back-chip {
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--ring,#e5e7eb); border-radius:999px; padding:6px 10px;
+      background:var(--card,#fff); color:var(--ink,#1f2937); text-decoration:none;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="logo">Student&nbsp;Portfolio</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visualizations.html" aria-current="page">Visualizations</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="graph.html">Knowledge Graph</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container fade-in">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;">
+      <h1 style="margin:0;">Option Greeks Explorer</h1>
+      <a class="back-chip" href="visualizations.html" aria-label="Back to Visualizations">← Back</a>
+    </div>
+    <p class="muted">Slide the inputs to see how the Black-Scholes price and Greeks respond. Toggle Call/Put.</p>
+
+    <!-- Controls -->
+    <section class="card">
+      <div class="row" style="justify-content:space-between; margin-bottom:10px;">
+        <div class="pill">
+          <label for="type" style="margin:0; font-weight:600;">Type:</label>
+          <select id="type" aria-label="Option type" style="border:none; background:transparent; outline:none;">
+            <option value="call">Call</option>
+            <option value="put">Put</option>
+          </select>
+        </div>
+        <div class="pill">
+          <label for="units" style="margin:0; font-weight:600;">Vol Units:</label>
+          <select id="units" aria-label="Volatility units" style="border:none; background:transparent; outline:none;">
+            <option value="pct">%</option>
+            <option value="dec">Decimal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="control card">
+          <label for="S">Spot (S)</label>
+          <div class="row">
+            <input id="S" type="range" min="50" max="200" step="1" value="100" />
+            <div class="value"><span id="S_val">100</span></div>
+          </div>
+        </div>
+
+        <div class="control card">
+          <label for="K">Strike (K)</label>
+          <div class="row">
+            <input id="K" type="range" min="50" max="200" step="1" value="100" />
+            <div class="value"><span id="K_val">100</span></div>
+          </div>
+        </div>
+
+        <div class="control card">
+          <label for="sigma">Volatility (σ)</label>
+          <div class="row">
+            <input id="sigma" type="range" min="5" max="150" step="1" value="30" />
+            <div class="value"><span id="sigma_val">30%</span></div>
+          </div>
+        </div>
+
+        <div class="control card">
+          <label for="r">Risk-free (r)</label>
+          <div class="row">
+            <input id="r" type="range" min="0" max="10" step="0.1" value="4" />
+            <div class="value"><span id="r_val">4.0%</span></div>
+          </div>
+        </div>
+
+        <div class="control card">
+          <label for="T">Time to Expiry (years)</label>
+          <div class="row">
+            <input id="T" type="range" min="0.02" max="3" step="0.01" value="1" />
+            <div class="value"><span id="T_val">1.00y</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Metrics -->
+      <div class="metrics">
+        <div class="metric card">
+          <h3>Price</h3>
+          <div class="num" id="price_out">$0.00</div>
+        </div>
+        <div class="metric card">
+          <h3>Delta (Δ)</h3>
+          <div class="num" id="delta_out">0.0000</div>
+        </div>
+        <div class="metric card">
+          <h3>Gamma (Γ)</h3>
+          <div class="num" id="gamma_out">0.0000</div>
+        </div>
+        <div class="metric card">
+          <h3>Vega</h3>
+          <div class="num" id="vega_out">0.0000</div>
+        </div>
+        <div class="metric card">
+          <h3>Theta (Θ) / day</h3>
+          <div class="num" id="theta_out">0.0000</div>
+        </div>
+        <div class="metric card">
+          <h3>Rho (ρ)</h3>
+          <div class="num" id="rho_out">0.0000</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chart -->
+    <section class="card" style="margin-top:14px;">
+      <h2 style="margin:0 0 10px;">Price vs Spot</h2>
+      <p class="muted" style="margin:0 0 12px;">Curve recomputes as you move sliders.</p>
+      <canvas id="priceChart" height="260"></canvas>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Jo Mohan. All rights reserved.</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <script>
+    // ---------- Math helpers ----------
+    const SQRT_2PI = Math.sqrt(2 * Math.PI);
+    const Npdf = x => Math.exp(-0.5 * x * x) / SQRT_2PI;
+    const Ncdf = x => 0.5 * (1 + erf(x / Math.SQRT2));
+    function erf(x){
+      const sgn = Math.sign(x);
+      x = Math.abs(x);
+      const a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
+      const t=1/(1+p*x);
+      const y=1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+      return sgn*y;
+    }
+
+    function d1(S,K,r,sigma,T){ return (Math.log(S/K) + (r + 0.5*sigma*sigma)*T) / (sigma*Math.sqrt(T)); }
+    function d2(d1,sigma,T){ return d1 - sigma*Math.sqrt(T); }
+
+    function bsCall(S,K,r,sigma,T){
+      const _d1 = d1(S,K,r,sigma,T), _d2 = d2(_d1,sigma,T);
+      return S*Ncdf(_d1) - K*Math.exp(-r*T)*Ncdf(_d2);
+    }
+    function bsPut(S,K,r,sigma,T){
+      const _d1 = d1(S,K,r,sigma,T), _d2 = d2(_d1,sigma,T);
+      return K*Math.exp(-r*T)*Ncdf(-_d2) - S*Ncdf(-_d1);
+    }
+
+    function greeks(type,S,K,r,sigma,T){
+      const _d1 = d1(S,K,r,sigma,T), _d2 = d2(_d1,sigma,T);
+      const pdf = Npdf(_d1);
+      const disc = Math.exp(-r*T);
+      const sign = (type==='call') ? 1 : -1;
+
+      const delta = (type==='call') ? Ncdf(_d1) : (Ncdf(_d1) - 1);
+      const gamma = pdf / (S * sigma * Math.sqrt(T));
+      const vega  = S * pdf * Math.sqrt(T);
+      const theta = - (S*pdf*sigma)/(2*Math.sqrt(T)) - sign * r * K * disc * Ncdf(sign*_d2);
+      const rho   = sign * K * T * disc * Ncdf(sign*_d2);
+
+      return { delta, gamma, vega, theta, rho, d1:_d1, d2:_d2 };
+    }
+
+    // ---------- DOM ----------
+    const els = {
+      type: document.getElementById('type'),
+      units: document.getElementById('units'),
+      S: document.getElementById('S'), S_val: document.getElementById('S_val'),
+      K: document.getElementById('K'), K_val: document.getElementById('K_val'),
+      sigma: document.getElementById('sigma'), sigma_val: document.getElementById('sigma_val'),
+      r: document.getElementById('r'), r_val: document.getElementById('r_val'),
+      T: document.getElementById('T'), T_val: document.getElementById('T_val'),
+      price_out: document.getElementById('price_out'),
+      delta_out: document.getElementById('delta_out'),
+      gamma_out: document.getElementById('gamma_out'),
+      vega_out: document.getElementById('vega_out'),
+      theta_out: document.getElementById('theta_out'),
+      rho_out: document.getElementById('rho_out'),
+    };
+
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: { labels: [], datasets: [{ label: 'Price', data: [], borderWidth: 2, tension: 0.15 }] },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { title: { display: true, text: 'Spot (S)' } },
+          y: { title: { display: true, text: 'Option Price' } }
+        }
+      }
+    });
+
+    function readInputs(){
+      const S = +els.S.value;
+      const K = +els.K.value;
+      const r = (+els.r.value) / 100;
+      const T = +els.T.value;
+      let sigma = +els.sigma.value;
+      if (els.units.value === 'pct') sigma = sigma/100;
+
+      els.S_val.textContent = S.toFixed(0);
+      els.K_val.textContent = K.toFixed(0);
+      els.r_val.textContent = (+els.r.value).toFixed(1) + '%';
+      els.T_val.textContent = T.toFixed(2) + 'y';
+      els.sigma_val.textContent = (els.units.value==='pct' ? (+els.sigma.value).toFixed(0)+'%' : sigma.toFixed(2));
+
+      return { type: els.type.value, S, K, r, sigma, T };
+    }
+
+    function update(){
+      const { type, S, K, r, sigma, T } = readInputs();
+
+      const price = (type==='call') ? bsCall(S,K,r,sigma,T) : bsPut(S,K,r,sigma,T);
+      const g = greeks(type,S,K,r,sigma,T);
+
+      els.price_out.textContent = '$' + price.toFixed(2);
+      els.delta_out.textContent = g.delta.toFixed(4);
+      els.gamma_out.textContent = g.gamma.toExponential(3);
+      els.vega_out.textContent  = (g.vega / (els.units.value==='pct' ? 100 : 1)).toFixed(4); // per 1% if pct
+      els.theta_out.textContent = (g.theta / 365).toFixed(4); // per day
+      els.rho_out.textContent   = g.rho.toFixed(4);
+
+      // update chart
+      const Smin = Math.max(1, S * 0.5);
+      const Smax = S * 1.5;
+      const steps = 60;
+      const xs = [];
+      const ys = [];
+      for (let i=0;i<=steps;i++){
+        const s = Smin + (Smax - Smin) * (i/steps);
+        xs.push(s.toFixed(0));
+        ys.push((type==='call' ? bsCall(s,K,r,sigma,T) : bsPut(s,K,r,sigma,T)));
+      }
+      chart.data.labels = xs;
+      chart.data.datasets[0].data = ys;
+      chart.update();
+    }
+
+    ['type','units','S','K','sigma','r','T'].forEach(id => {
+      document.getElementById(id).addEventListener('input', update);
+    });
+
+    update();
+  </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Knowledge Graph – Student Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Page-local styles that work with your existing theme */
+    .viz-card {
+      position: relative;
+      background: var(--card, #fff);
+      border: 1px solid var(--ring, #e5e7eb);
+      border-radius: 16px;
+      box-shadow: 0 10px 20px rgba(17,24,39,0.06);
+      overflow: hidden;
+      padding: 0; /* graph is full-bleed inside the card */
+    }
+    .viz-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--ring, #e5e7eb);
+      background: var(--bg, #fbfaf8);
+    }
+    .viz-meta { color: var(--muted, #6b7280); margin: 0; }
+
+    /* Graph canvas area inside the card */
+    #graph {
+      width: 100%;
+      height: min(72vh, 820px);  /* responsive height */
+      background: #1a1a1a;       /* same as your original */
+    }
+
+    .viz-actions {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+    .chip-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 40px; min-width: 40px; padding: 0 12px; gap: 8px;
+      border-radius: 999px; border: 1px solid var(--ring, #e5e7eb);
+      background: var(--card, #fff); color: var(--ink, #1f2937);
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+    }
+    .chip-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .chip-btn:focus-visible { outline: 2px solid #8a5cec; outline-offset: 2px; }
+
+    /* Hide “Back” if embedded in an iframe */
+    body.embedded .back-chip { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="logo">Jo&nbsp;Mohan</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visualizations.html">Visualizations</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="graph.html" aria-current="page">Knowledge Graph</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container fade-in">
+    <h1>Knowledge Graph</h1>
+    <p class="muted">
+      My personal knowledge graph built with Obsidian and visualized. Any updates to my notes are reflected here in real-time.
+    </p>
+
+    <section class="viz-card" aria-labelledby="viz-title">
+      <div class="viz-head">
+        <h2 id="viz-title">Obsidian Network</h2>
+      </div>
+
+      <!-- Action chips -->
+      <div class="viz-actions" role="group" aria-label="Graph actions">
+        <div class="chip-wrapper">
+          <button class="chip-btn" id="expand-btn" title="Open in new tab" aria-label="Open in new tab">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            Open
+          </button>
+        </div>
+      </div>
+
+      <!-- Graph canvas -->
+      <div id="graph" role="img" aria-label="Force-directed graph of Obsidian notes"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Jo Mohan. All rights reserved.</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+
+  <!-- libs (same as your original) -->
+  <script src="https://unpkg.com/force-graph"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <script>
+    // Keep your iframe-detection behavior
+    if (window.self !== window.top) {
+      document.body.classList.add('embedded');
+    }
+
+    document.getElementById('expand-btn').addEventListener('click', () => {
+      window.open('graph.html', '_blank', 'noopener');
+    });
+
+    const graphElement = document.getElementById('graph');
+
+    let hoverNode = null;
+    let highlightLinks = new Set();
+
+    const DEFAULT_NODE_COLOR = '#cccccc';
+    const HIGHLIGHT_NODE_COLOR = '#8a5cec';
+    const DEFAULT_LINK_COLOR = '#444444';
+    const HIGHLIGHT_LINK_COLOR = '#8a5cec';
+    const TEXT_COLOR = '#cccccc';
+
+    // Use your current JSON location; change if you move it later.
+    fetch('graph-data.json', { cache: 'no-store' })
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load graph data');
+        return res.json();
+      })
+      .then(data => {
+        // Make the graph fill the card area
+        const resize = () => {
+          const rect = graphElement.getBoundingClientRect();
+          Graph.width(rect.width).height(rect.height);
+        };
+
+        const Graph = ForceGraph()(graphElement)
+          .graphData(data)
+          .nodeId('id')
+          .nodeVal(node => (node === hoverNode ? 7 : 5))
+          .linkSource('source')
+          .linkTarget('target')
+          .backgroundColor('#1a1a1a')
+          .linkWidth(link => highlightLinks.has(link) ? 1.2 : 0.6)
+          .linkColor(link => highlightLinks.has(link) ? HIGHLIGHT_LINK_COLOR : DEFAULT_LINK_COLOR)
+          .linkDirectionalParticles(0)
+          .linkDirectionalArrowLength(0)
+          .d3Force('charge', d3.forceManyBody().strength(-20))
+          .d3Force('link', d3.forceLink().distance(60).strength(1))
+          .d3Force('collide', d3.forceCollide(10))
+          .d3Force('center', d3.forceCenter())
+          .nodeCanvasObject((node, ctx, globalScale) => {
+            const isHovered = (node === hoverNode);
+            ctx.fillStyle = isHovered ? HIGHLIGHT_NODE_COLOR : DEFAULT_NODE_COLOR;
+            ctx.beginPath();
+            const radius = (isHovered ? 7 : 5) / 2;
+            ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+            ctx.fill();
+
+            if (globalScale > 0.6) {
+              const label = (node.title || node.id.split('/').pop().replace('.md',''));
+              const fontSize = 12 / globalScale;
+              ctx.font = `${fontSize}px Arial, sans-serif`;
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              ctx.fillStyle = TEXT_COLOR;
+              const labelX = node.x + radius + 8 / globalScale;
+              ctx.fillText(label, labelX, node.y);
+            }
+          })
+          .onNodeHover(node => {
+            hoverNode = node || null;
+            highlightLinks.clear();
+
+            if (node) {
+              // handle both id-or-object link endpoints
+              data.links.forEach(link => {
+                const src = typeof link.source === 'object' ? link.source.id : link.source;
+                const tgt = typeof link.target === 'object' ? link.target.id : link.target;
+                if (src === node.id || tgt === node.id) highlightLinks.add(link);
+              });
+            }
+            graphElement.style.cursor = node ? 'pointer' : 'default';
+          });
+
+        // Fit once the layout stabilizes
+        Graph.onEngineStop(() => Graph.zoomToFit(400, 80));
+
+        // Keep responsive sizing inside the card
+        window.addEventListener('resize', resize);
+        resize();
+      })
+      .catch(err => {
+        console.error(err);
+        graphElement.innerHTML =
+          '<div style="color:#aaa;padding:16px">Could not load graph data.</div>';
+      });
+  </script>
+</body>
+</html>

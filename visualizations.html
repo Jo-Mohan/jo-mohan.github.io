@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualizations – Student Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="logo">Jo&nbsp;Mohan</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visualizations.html" aria-current="page">Visualizations</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="graph.html">Knowledge Graph</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container fade-in">
+    <h1>Visualizations</h1>
+    <p class="muted">Interactive math and finance demos. Click a card to explore.</p>
+
+  <!-- Greeks Explorer card -->
+  <section class="card" aria-labelledby="greeks-title" style="display:grid;gap:12px;">
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;">
+        <div style="flex:1;min-width:260px;">
+          <h2 id="greeks-title">Option Greeks Explorer</h2>
+          <p class="muted" style="margin:6px 0 10px;">
+            A Black–Scholes playground. Move sliders for spot, strike, volatility, rate, and time to see how
+            price and the Greeks (Δ, Γ, Vega, Θ, ρ) respond.
+          </p>
+          <ul class="muted" style="margin:0;padding-left:18px;">
+            <li>Live Δ / Γ / Vega / Θ / ρ</li>
+            <li>Call/Put toggle + %/decimal vol</li>
+            <li>Price vs Spot chart updates in real time</li>
+          </ul>
+        </div>
+
+  <!-- Static preview -->
+  <div class="card" style="flex:0 0 320px;max-width:100%;padding:12px;">
+          <div style="font-weight:600;margin-bottom:6px;">Demo</div>
+          <div style="height:160px;border:1px solid var(--ring,#e5e7eb);border-radius:12px;background:linear-gradient(180deg,#faf7f2,#fff);display:flex;align-items:center;justify-content:center;">
+            <svg id="greeks-preview" width="100%" height="140" viewBox="0 0 320 140" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Static price vs spot preview">
+              <line x1="28" y1="12" x2="28" y2="124" stroke="#d9d6d2"/>
+              <line x1="28" y1="124" x2="308" y2="124" stroke="#d9d6d2"/>
+              <path id="preview-path" d="" fill="none" stroke="#8a5cec" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <div class="chip-wrapper">
+          <a class="read-more" href="greeks.html" aria-label="Open Option Greeks Explorer">Open Explorer →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Jo Mohan. All rights reserved.</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+
+  <script>
+    // Static Black-Scholes curve for preview
+    (function(){
+      const svgPath = document.getElementById('preview-path');
+      if (!svgPath) return;
+
+      const erf = x => {
+        const s = Math.sign(x); x = Math.abs(x);
+        const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+        const t=1/(1+p*x);
+        const y=1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+        return s*y;
+      };
+      const N = x => 0.5*(1+erf(x/Math.SQRT2));
+      const d1 = (S,K,r,sigma,T) => (Math.log(S/K)+(r+0.5*sigma*sigma)*T)/(sigma*Math.sqrt(T));
+      const d2 = (d1v,sigma,T) => d1v - sigma*Math.sqrt(T);
+      const call = (S,K,r,sigma,T) => {
+        const _d1=d1(S,K,r,sigma,T), _d2=d2(_d1,sigma,T);
+        return S*N(_d1) - K*Math.exp(-r*T)*N(_d2);
+      };
+
+      const K=100, r=0.04, sigma=0.30, T=1.0;
+      const Smin=50, Smax=200, steps=60;
+
+      const x0=28, y0=124, w=280, h=112;
+      const xs=[], ys=[];
+      for(let i=0;i<=steps;i++){
+        const S = Smin + (Smax-Smin)*i/steps;
+        xs.push(S);
+        ys.push(call(S,K,r,sigma,T));
+      }
+
+      const yMin = Math.min(...ys), yMax = Math.max(...ys);
+      const X = S => x0 + (S-Smin)/(Smax-Smin)*w;
+      const Y = P => y0 - (P - yMin)/(yMax - yMin || 1)*h;
+
+      let d = "";
+      for(let i=0;i<xs.length;i++){
+        const x = X(xs[i]), y = Y(ys[i]);
+        d += (i===0 ? `M ${x},${y}` : ` L ${x},${y}`);
+      }
+      svgPath.setAttribute('d', d);
+    })();
+  </script>
+</body>
+</html>

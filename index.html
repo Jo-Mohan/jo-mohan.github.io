@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+  Home page for the student portfolio.
+
+  This document follows semantic HTML5 conventions to make the
+  structure of the page clear to screen readers and search engines.
+  A common navigation bar at the top links to the other sections of
+  the site. The CSS and JavaScript imported below provide the
+  minimalist look and feel inspired by the warm, muted colour palette
+  used in Anthropic's Claude branding【832974945123559†L88-L103】. Rounded corners
+  and soft shadows help achieve an academic yet approachable aesthetic.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home – Student Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Preload the primary colour as a meta theme-colour for browsers -->
+  <meta name="theme-color" content="#C15F3C" />
+</head>
+<body>
+  <!-- Site header with navigation. A toggle button is provided for small
+       screens. See scripts.js for behaviour. -->
+  <header>
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="logo">Jo&nbsp;Mohan</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visualizations.html">Visualizations</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="graph.html">Knowledge Graph</a></li>
+      </ul>
+      </ul>
+    </nav>
+  </header>
+  <main class="container fade-in">
+  <section class="about">
+    <div class="about-wrapper">
+      <!-- Headshot -->
+      <img
+        src="IMG_0100.JPG"
+        alt="Portrait of Jo Mohan"
+        class="headshot"
+      />
+
+      <!-- Text content -->
+      <div class="about-text">
+        <h1>About Me</h1>
+        <p>
+          I am currently a junior at the University of Illinois Urbana-Champaign
+          studying Computer Science and Mathematics. On this site, you can find
+          my personal projects, finance visualizations, blog posts, and
+          my academic work.
+        </p>
+        <p>
+          Outside of academics, I enjoy weightlifting, playing poker, and
+          collecting Funko Pops. I also have a passion for videogames and have
+          owned most consoles you could think of.
+        </p>
+        <p>
+          <b>News:</b><br />
+          <i>06/2026:</i> I will be joining Geneva Trading this summer as a
+          Quantitative Trading Intern! I am looking forward to applying my
+          skills in a fast-paced trading environment.<br /><br />
+          <i>10/2025:</i> I recently published a blog post on Procedural Generation. Check it out on the
+          <a href="blog.html">Blog</a> page!
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+  <footer>
+    <p>&copy; 2025 Jo Mohan. All rights reserved.</p>
+  </footer>
+  <script src="scripts.js"></script>
+  <!-- Chart.js is only used on pages that include a chart. Including it
+       here ensures it’s cached across pages without blocking rendering. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

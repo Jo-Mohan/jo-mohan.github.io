@@ -1,0 +1,361 @@
+/* Global styles for the student portfolio site.
+   The design draws inspiration from the warm, muted colour palette
+   and soft rounded edges of Anthropic's Claude branding【832974945123559†L88-L103】【832974945123559†L115-L118】.
+   Colours are defined as CSS custom properties to ease customization.
+   The layout is responsive and uses accessible typography, spacing and
+   contrast following digital accessibility guidelines【658675121105025†L116-L132】【658675121105025†L136-L149】.
+*/
+
+/* Box-sizing reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* Darker academic blue palette (original but richer blues) */
+  --color-primary: #102A43;    /* deep navy for headings & strong accents */
+  --color-primary-strong: #0B1B2B; /* near-black navy for highest contrast */
+  --color-accent: #1665A3;     /* livelier deep blue for highlights (more pizzaz) */
+  --color-secondary: #2B86D1;  /* brighter secondary for hover states */
+  --color-highlight: #2B6F94;  /* brighter blue for subtle backgrounds */
+  --color-background: #F4F7FA; /* very light cool background */
+  --color-card: #FFFFFF;       /* card background */
+  --color-text: #17364A;      /* dark blue-gray for body text */
+  --color-muted: #4A6C7A;     /* muted bluish secondary text */
+  --radius: 8px;
+  --transition: 0.28s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: var(--color-card);
+  color: var(--color-text);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: var(--color-primary);
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin-left: 1.5rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--color-text);
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+  background-color: var(--color-secondary);
+  color: #ffffff;
+}
+
+.nav-links a.active {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+/* Mobile nav toggle */
+.nav-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/* Main content container */
+.container {
+  width: 90%;
+  max-width: 800px;
+  margin: 2rem auto;
+  flex: 1 0 auto;
+}
+
+.container h1,
+.container h2,
+.container h3 {
+  color: var(--color-primary);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.container p {
+  margin-bottom: 1rem;
+  max-width: 70ch;
+}
+
+/* Cards used on various pages */
+.card {
+  background-color: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card h2,
+.card h3 {
+  margin-top: 0;
+}
+
+/* Meta text styling */
+.meta {
+  font-size: 0.875rem;
+  color: var(--color-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* Gallery styling */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: var(--radius);
+  display: block;
+  transition: transform var(--transition);
+}
+
+.gallery img:hover,
+.gallery img:focus {
+  transform: scale(1.05);
+}
+
+/* Blog read-more links and project links */
+a.read-more,
+article a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 0.5rem;
+  transition: color var(--transition);
+}
+
+a.read-more:hover,
+a.read-more:focus,
+article a:hover,
+article a:focus {
+  color: var(--color-accent);
+}
+
+/* Chip wrapper - reusable hover/hover-lift effect for chip-like UI
+   Apply this class to buttons/links that should slightly lift and highlight
+   on hover or focus. Respects prefers-reduced-motion. */
+.chip-wrapper {
+  display: inline-block; /* keep size to content */
+  border-radius: 999px;
+  transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition);
+  cursor: pointer; /* make it obvious it's clickable */
+  border: 1px solid transparent;
+  padding: 2px; /* small hit-area boost while preserving internal chip padding */
+}
+.chip-wrapper:hover,
+.chip-wrapper:focus-within {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(17,24,39,0.08);
+  background-color: color-mix(in srgb, var(--color-accent) 6%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+.chip-wrapper:active {
+  transform: translateY(0) scale(0.995);
+}
+
+/* Ensure chip contents keep their existing padding/appearance */
+.chip-wrapper > .chip-btn,
+.chip-wrapper > a.read-more,
+.chip-wrapper > article a {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Accessibility: respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .chip-wrapper {
+    transition: none;
+  }
+  .chip-wrapper:hover,
+  .chip-wrapper:focus-within,
+  .chip-wrapper:active {
+    transform: none;
+    box-shadow: none;
+    background-color: transparent;
+  }
+}
+
+/* Strong visible focus ring for keyboard users while remaining subtle visually */
+.chip-wrapper:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-accent) 72%, white 28%);
+  outline-offset: 3px;
+  border-color: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--color-card);
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+/* Fade-in animation for page load */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInMove 0.6s forwards;
+}
+
+@keyframes fadeInMove {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--color-card);
+    flex-direction: column;
+    align-items: flex-start;
+    width: 200px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition);
+  }
+
+  .nav-links li {
+    margin: 0.5rem 0;
+  }
+
+  .nav-links.open {
+    max-height: 500px;
+  }
+}
+
+/* === Headshot + About section styling === */
+.about-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.headshot {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.about-text {
+  flex: 1;
+  min-width: 260px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 680px) {
+  .about-wrapper {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .headshot {
+    width: 160px;
+    height: 160px;
+  }
+
+  .about-text {
+    text-align: left;
+  }
+}
+
+/* Interactive card: makes the entire card lift and highlight on hover/focus */
+.card.interactive {
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  will-change: transform;
+  cursor: pointer;
+}
+.card.interactive:hover,
+.card.interactive:focus-within {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(17,24,39,0.10);
+  border-color: rgba(0,0,0,0.06);
+}
+.card.interactive:active {
+  transform: translateY(-2px) scale(0.999);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.interactive,
+  .card.interactive:hover,
+  .card.interactive:focus-within,
+  .card.interactive:active {
+    transition: none;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
