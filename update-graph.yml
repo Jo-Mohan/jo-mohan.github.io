@@ -1,0 +1,61 @@
+name: Update Obsidian Graph
+
+on:
+  push:
+    branches: [ main, master ]  # adjust if your default branch is different
+  workflow_dispatch:            # lets you run it manually from the Actions tab
+
+permissions:
+  contents: write               # needed so the workflow can push the updated file
+
+concurrency:
+  group: update-graph
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout site repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ---- OPTION A: Jo-Brain is PUBLIC ----
+      - name: Checkout Jo-Brain
+        uses: actions/checkout@v4
+        with:
+          repository: Jo-Mohan/Jo-Brain   # <-- change this
+          path: brain
+
+      # ---- OPTION B: Jo-Brain is PRIVATE ----
+      # If private, remove the step above and uncomment the one below.
+      # Also create a repo secret called JO_BRAIN_TOKEN that has 'repo' scope PAT.
+      # - name: Checkout Jo-Brain (private)
+      #   uses: actions/checkout@v4
+      #   with:
+      #     repository: <YOUR_GH_USERNAME>/Jo-Brain  # <-- change this
+      #     path: brain
+      #     token: ${{ secrets.JO_BRAIN_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate graph-data.json
+        run: |
+          python3 generate_json.py ./brain
+
+      - name: Commit & push if changed
+        run: |
+          if git status --porcelain | grep -q "graph-data.json"; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add graph-data.json
+            git commit -m "Auto-update graph-data.json [skip ci]"
+            git push
+          else
+            echo "No changes to graph-data.json"
+          fi
