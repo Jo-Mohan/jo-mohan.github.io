@@ -279,7 +279,11 @@ footer {
     border-radius: var(--radius);
     max-height: 0;
     overflow: hidden;
-    transition: max-height var(--transition);
+    transition: max-height var(--transition), opacity var(--transition), transform var(--transition);
+    /* start hidden to avoid any visible sliver */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
   }
 
   .nav-links li {
@@ -288,6 +292,60 @@ footer {
 
   .nav-links.open {
     max-height: 500px;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* On small screens, hide the full top bar (logo + nav) visually
+     so only the hamburger toggle is visible. The toggle is fixed so
+     users can open the nav when needed. The menu (nav-links) will
+     appear as a floating panel when opened. */
+  .navbar {
+    /* remove visual chrome so it doesn't occupy vertical space */
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    /* ensure the bar doesn't leave a visible strip */
+    height: 0;
+    overflow: visible; /* allow the fixed toggle to show */
+  }
+
+  .navbar .logo {
+    display: none;
+  }
+
+  .nav-toggle {
+    /* make the toggle easy to reach and always visible */
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1100;
+    background: var(--color-card);
+    border-radius: 10px;
+    padding: 8px 10px;
+    box-shadow: 0 8px 24px rgba(17,24,39,0.12);
+  }
+
+  /* Floating menu panel when opened */
+  .nav-links {
+    top: 56px; /* below the fixed toggle */
+    right: 12px;
+    width: calc(100% - 32px);
+    max-width: 320px;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+  }
+
+  .nav-links li {
+    width: 100%;
+    margin: 0.4rem 0;
+  }
+
+  .nav-links a {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
   }
 }
 
