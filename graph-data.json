@@ -13,6 +13,9 @@
       "id": "PageRank Algorithm.md"
     },
     {
+      "id": "Autocorrelation.md"
+    },
+    {
       "id": "Chains and Antichains.md"
     },
     {
@@ -26,6 +29,9 @@
     },
     {
       "id": "Combinations (R-Combinations).md"
+    },
+    {
+      "id": "Grinold's Law.md"
     },
     {
       "id": "Recursion.md"
@@ -43,6 +49,9 @@
       "id": "Insertion Algorithms.md"
     },
     {
+      "id": "Autoregressive Models.md"
+    },
+    {
       "id": "Gray Codes.md"
     },
     {
@@ -52,6 +61,9 @@
       "id": "Fractal Noise.md"
     },
     {
+      "id": "Benchmarking.md"
+    },
+    {
       "id": "Relations and Order Structures.md"
     },
     {
@@ -59,6 +71,12 @@
     },
     {
       "id": "Equivalence Classes.md"
+    },
+    {
+      "id": "Quantitative Finance.md"
+    },
+    {
+      "id": "Information Coefficient.md"
     },
     {
       "id": "Lattices.md"
@@ -87,6 +105,22 @@
     {
       "source": "Perlin Noise.md",
       "target": "Procedural Generation.md"
+    },
+    {
+      "source": "Grinold's Law.md",
+      "target": "Quantitative Finance.md"
+    },
+    {
+      "source": "Grinold's Law.md",
+      "target": "Information Coefficient.md"
+    },
+    {
+      "source": "Grinold's Law.md",
+      "target": "Autocorrelation.md"
+    },
+    {
+      "source": "Grinold's Law.md",
+      "target": "Benchmarking.md"
     },
     {
       "source": "Recursion.md",
@@ -127,6 +161,10 @@
     {
       "source": "Hasse Diagrams.md",
       "target": "Gray Codes.md"
+    },
+    {
+      "source": "Autoregressive Models.md",
+      "target": "Quantitative Finance.md"
     },
     {
       "source": "Pigeonhole Principal.md",
