@@ -27,38 +27,32 @@
     <h1>Visualizations</h1>
     <p class="muted">Interactive math and finance demos. Click a card to explore.</p>
 
-  <!-- Greeks Explorer card -->
-  <section class="card" aria-labelledby="greeks-title" style="display:grid;gap:12px;">
-      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;">
+  
+    <!-- Perlin 3D visualization card -->
+    <section class="card" aria-labelledby="perlin-title" style="display:grid;gap:12px;margin-top:18px;">
+      <div style="display:flex;gap:16px;align-items:flex-start;">
         <div style="flex:1;min-width:260px;">
-          <h2 id="greeks-title">Option Greeks Explorer</h2>
+          <h2 id="perlin-title">Perlin Noise — 3D Sandbox</h2>
           <p class="muted" style="margin:6px 0 10px;">
-            A Black–Scholes playground. Move sliders for spot, strike, volatility, rate, and time to see how
-            price and the Greeks (Δ, Γ, Vega, Θ, ρ) respond.
+            Interactive 3D demo of Perlin noise used in procedural terrain. Adjust frequency and amplitude to see how the surface responds.
           </p>
           <ul class="muted" style="margin:0;padding-left:18px;">
-            <li>Live Δ / Γ / Vega / Θ / ρ</li>
-            <li>Call/Put toggle + %/decimal vol</li>
-            <li>Price vs Spot chart updates in real time</li>
+            <li>Rotate & zoom the surface</li>
+            <li>Adjust frequency/amplitude live</li>
+            <li>See color shading tied to height</li>
           </ul>
         </div>
-
-  <!-- Static preview -->
-  <div class="card" style="flex:0 0 320px;max-width:100%;padding:12px;">
+        <div class="card" style="flex:0 0 320px;max-width:100%;padding:12px;display:flex;flex-direction:column;justify-content:center;">
           <div style="font-weight:600;margin-bottom:6px;">Demo</div>
           <div style="height:160px;border:1px solid var(--ring,#e5e7eb);border-radius:12px;background:linear-gradient(180deg,#faf7f2,#fff);display:flex;align-items:center;justify-content:center;">
-            <svg id="greeks-preview" width="100%" height="140" viewBox="0 0 320 140" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Static price vs spot preview">
-              <line x1="28" y1="12" x2="28" y2="124" stroke="#d9d6d2"/>
-              <line x1="28" y1="124" x2="308" y2="124" stroke="#d9d6d2"/>
-              <path id="preview-path" d="" fill="none" stroke="#8a5cec" stroke-width="2"/>
-            </svg>
+            <span style="color:var(--muted);font-size:0.95rem;">Perlin — 3D</span>
           </div>
         </div>
       </div>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <div class="chip-wrapper">
-          <a class="read-more" href="greeks.html" aria-label="Open Option Greeks Explorer">Open Explorer →</a>
+          <a class="read-more" href="perlin-visualization.html" aria-label="Open Perlin 3D Sandbox">Open Sandbox →</a>
         </div>
       </div>
     </section>

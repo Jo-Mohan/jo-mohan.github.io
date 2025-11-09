@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>An Exploration on the Math of Procedural Generation</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      packages: {'[+]': ['noerrors']},
+    },
+    options: {
+      skipHtmlTags: ['script','noscript','style','textarea','pre','code'],
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script>
+
+</head>
+<body>
+  <header>
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="logo">Jo&nbsp;Mohan</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visualizations.html">Visualizations</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="graph.html">Knowledge Graph</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container fade-in">
+    <article class="card">
+      <header style="margin-bottom:12px;">
+        <h1>An Exploration on the Math of Procedural Generation</h1>
+        <p class="meta">October 2025 &middot; By Jo Mohan</p>
+      </header>
+
+
+     <section>
+  <h3>Introduction</h3>
+  <p>
+    Procedural generation is a mathematical technique used in game development to create vast worlds through a set of rules rather than manual modeling. 
+    Instead of outlining every detail for the terrain, devs can uses algorithms that simulate natural variation.
+  </p>
+</section>
+
+<section>
+  <h3>Core Generation Concepts</h3>
+  <p>
+    <strong>Perlin noise</strong> is a gradient-based noise function that produces continuous, flowing patterns rather than abrupt randomness. 
+    It assigns random gradient vectors to lattice points on a grid and interpolates between them, yielding smooth transitions. 
+    In mathematical terms, we can view the noise as a function \(\mathcal{N}(x, y)\) built from multiple <em>octaves</em> with each adding finer detail at a higher frequency but lower amplitude:
+  </p>
+
+  <p>
+    \[
+      \mathcal{N}(x, y) = \sum_{i=1}^{k} A_i \, \mathrm{noise}(f_i x, f_i y)
+    \]
+    where \(A_i\) controls the amplitude and \(f_i\) the frequency of the \(i^{\text{th}}\) octave. 
+    This hierarchical combination creates the familiar “coherent noise” textures used in terrain, clouds, and water.
+  </p>
+
+  <p>
+    <strong>Fractals</strong> are functions that exhibit self-similarity across scales. 
+    A common example is the <em>fractal Brownian motion</em> (fBm), which recursively sums scaled copies of noise functions:
+  </p>
+
+  <p>
+    \[
+      \mathcal{F}(x, y) = \sum_{i=1}^{k} \frac{1}{2^i} \, \mathcal{N}(2^i x, 2^i y)
+    \]
+    This generates structures with repeating detail at every zoom level which is useful for something self similar such as a coastline.
+  </p>
+
+  <p>
+    We can also blend different terrain characteristics using a <em>fade parameter</em> \(\alpha(x, y)\) to smoothly transition between noise and fractal regions:
+  </p>
+
+  <p>
+    \[
+      H(x, y) = \alpha(x, y)\,\mathcal{N}(x, y) + \big(1 - \alpha(x, y)\big)\,\mathcal{F}(x, y)
+    \]
+    Here, \(H(x, y)\) represents the resulting height map and allows for a linear combination of noise and fractal.
+  </p>
+</section>
+
+      <section>
+        <h3>Sandbox</h3>
+        <p>
+          <p class="muted">Try the interactive <b><a href="perlin-visualization.html"> 3D Perlin noise visualization</a></b> to explore parameter effects described above.</p>
+        </p>
+      </section>
+
+      <section>
+        <h3>Practical Examples</h3>
+
+          (Coming soon.)
+
+
+      <footer style="margin-top:16px;">
+        <a class="back-chip" href="blog.html" aria-label="Back to Blog">← Back to Blog</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer>
+    <nav class="social" aria-label="Social links" style="display:flex;justify-content:center;gap:18px;padding:16px 0;">
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/in/jotishwar-mohan" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" width="24" height="24" style="filter:invert(0);">
+      </a>
+      <!-- GitHub -->
+      <a href="https://github.com/Jo-Mohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" width="24" height="24" style="filter:invert(0);">
+      </a>
+      <!-- Email -->
+      <a href="mailto:jomohan1155@gmail.com" aria-label="Email">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email" width="24" height="24" style="filter:invert(0);">
+      </a>
+      <!-- Resume -->
+      <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/adobeacrobatreader.svg" alt="Resume" width="24" height="24" style="filter:invert(0);">
+      </a>
+    </nav>
+  </footer>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

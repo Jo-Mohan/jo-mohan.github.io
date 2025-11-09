@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <title>Perlin Noise 3D — Visualization</title>
+  <style>
+    :root { --nav-h: 56px; }
+    html, body { height: 100%; margin: 0; }
+    header { height: var(--nav-h); }
+#canvas-root {
+  display: flex;
+  justify-content: center;  /* centers canvas horizontally */
+  align-items: center;      /* centers canvas vertically */
+  width: 100%;
+  max-width: 1200px;
+  height: 60vh;
+  margin: 40px auto;
+  background: #0f1720;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+#canvas-root canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* keep aspect ratio if needed */
+}
+
+    .viz-caption { max-width: 900px; margin: 12px auto 0; text-align: center; padding: 0 12px; }
+    .muted { color: var(--color-muted); font-size: 14px; }
+    .controls-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 8px; }
+    .controls-row label { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--color-text); }
+    .controls-row input[type="range"] { width: 120px; }
+    .back-chip { display: inline-block; padding: 6px 12px; background: var(--color-highlight); color: white; text-decoration: none; border-radius: var(--radius); font-size: 14px; transition: background var(--transition); }
+    .back-chip:hover { background: var(--color-accent); }
+
+    #webgl-error {
+      position: absolute; inset: auto 12px 12px 12px;
+      background: #fee2e2; color: #7f1d1d; border: 1px solid #fecaca;
+      padding: 8px 10px; border-radius: 8px; font-size: 14px; display: none;
+    }
+  </style>
+
+  <!-- Import map so OrbitControls can resolve the bare "three" specifier -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <nav class="navbar" aria-label="Main navigation">
+      <div class="logo">Jo&nbsp;Mohan</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="visualizations.html">Visualizations</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="work.html">Work</a></li>
+        <li><a href="graph.html">Knowledge Graph</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main role="main" aria-label="Perlin noise 3D visualization">
+    <div id="canvas-root">
+      <div id="webgl-error">Couldn't start WebGL modules. Check your network/console.</div>
+    </div>
+  </main>
+
+  <div class="viz-caption">
+    <h1 style="margin:0 0 8px">Interactive 3D Perlin Noise</h1>
+    <p class="muted">Rotate & zoom with mouse (or touch). Use the sliders to change noise. Toggle grid/wireframe to debug.</p>
+    <div class="controls-row">
+      <label>Frequency
+        <input id="freq" type="range" min="0.1" max="5" step="0.1" value="1.6" />
+      </label>
+      <label>Amplitude
+        <input id="amp" type="range" min="0.1" max="4" step="0.1" value="1.4" />
+      </label>
+      <label><input id="wireToggle" type="checkbox" /> Wireframe</label>
+      <label><input id="animateToggle" type="checkbox" checked /> Animate</label>
+    </div>
+    <p style="margin-top:12px;">
+      This demo uses Perlin noise to simulate a terrain heightmap.
+    </p>
+    <p style="margin-top:8px;"><a class="back-chip" href="procedural-generation.html">← Back to Post</a></p>
+  </div>
+
+  <footer>
+    <nav class="social" aria-label="Social links" style="display:flex;justify-content:center;gap:18px;padding:16px 0;">
+      <a href="https://www.linkedin.com/in/jotishwar-mohan" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" width="24" height="24" style="filter:invert(0);">
+      </a>
+      <a href="https://github.com/Jo-Mohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="GitHub" width="24" height="24" style="filter:invert(0);">
+      </a>
+      <a href="mailto:jomohan1155@gmail.com" aria-label="Email">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Email" width="24" height="24" style="filter:invert(0);">
+      </a>
+      <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/adobeacrobatreader.svg" alt="Resume" width="24" height="24" style="filter:invert(0);">
+      </a>
+    </nav>
+  </footer>
+
+ <script type="module">
+  import * as THREE from 'three';
+  import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
+
+  const root = document.getElementById('canvas-root');
+  const freqEl = document.getElementById('freq');
+  const ampEl = document.getElementById('amp');
+  const wireToggle = document.getElementById('wireToggle');
+  const animateToggle = document.getElementById('animateToggle');
+
+  // Scene setup
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0f1720);
+  scene.fog = new THREE.Fog(0x0f1720, 15, 300);
+
+  // Camera — pulled back & slightly elevated
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+  camera.position.set(0, 90, 160);
+  camera.lookAt(0, 0, 0);
+
+  // Renderer
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio || 1);
+  root.appendChild(renderer.domElement);
+
+  function syncSize() {
+    const rect = root.getBoundingClientRect();
+    const w = Math.max(1, Math.floor(rect.width));
+    const h = Math.max(1, Math.floor(rect.height * 0.85)); // smaller render height
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  syncSize();
+  new ResizeObserver(syncSize).observe(root);
+  window.addEventListener('resize', syncSize);
+
+  // Controls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enabled = false;
+
+
+  // Lighting
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x334155, 0.8);
+  const dir = new THREE.DirectionalLight(0xffffff, 0.8);
+  dir.position.set(25, 60, 20);
+  scene.add(hemi, dir);
+
+  // Geometry (smaller scale)
+  const size = 50;          // was 80
+  const segments = 150;     // keep detail
+  const geometry = new THREE.PlaneGeometry(size, size, segments, segments);
+  geometry.rotateX(-Math.PI / 2);
+  const colors = new Float32Array(geometry.attributes.position.count * 3);
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+  const material = new THREE.MeshStandardMaterial({
+    vertexColors: true,
+    flatShading: false,
+    side: THREE.DoubleSide,
+    wireframe: false
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.y = -5; // center visually
+  mesh.scale.set(3, 3, 3);
+  scene.add(mesh);
+
+  // Perlin noise
+  class Perlin {
+    constructor() {
+      this.p = new Uint8Array(512);
+      const perm = [
+        151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,
+        37,240,21,10,23,190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,
+        57,177,33,88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,
+        166,77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+        102,143,54,65,25,63,161,1,216,80,73,209,76,132,187,208,89,18,169,200,196,135,130,
+        116,188,159,86,164,100,109,198,173,186,3,64,52,217,226,250,124,123,5,202,38,147,
+        118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,223,183,170,213,
+        119,248,152,2,44,154,163,70,221,153,101,155,167,43,172,9,129,22,39,253,19,98,108,
+        110,79,113,224,232,178,185,112,104,218,246,97,228,251,34,242,193,238,210,144,12,
+        191,179,162,241,81,51,145,235,249,14,239,107,49,192,214,31,181,199,106,157,184,
+        84,204,176,115,121,50,45,127,4,150,254,138,236,205,93,222,114,67,29,24,72,243,141,
+        128,195,78,66,215,61,156,180
+      ];
+      for (let i = 0; i < 256; i++) this.p[256 + i] = this.p[i] = perm[i];
+    }
+    fade(t){ return t*t*t*(t*(t*6-15)+10); }
+    lerp(t,a,b){ return a + t*(b-a); }
+    grad(h,x,y,z){ const hh=h&15,u=hh<8?x:y,v=hh<4?y:(hh===12||hh===14?x:z);return ((hh&1)?-u:u)+((hh&2)?-v:v);}
+    noise(x,y,z=0){
+      const p=this.p; let X=Math.floor(x)&255,Y=Math.floor(y)&255,Z=Math.floor(z)&255;
+      x-=Math.floor(x);y-=Math.floor(y);z-=Math.floor(z);
+      const u=this.fade(x),v=this.fade(y),w=this.fade(z);
+      const A=p[X]+Y,AA=p[A]+Z,AB=p[A+1]+Z,B=p[X+1]+Y,BA=p[B]+Z,BB=p[B+1]+Z;
+      return this.lerp(w,
+        this.lerp(v,
+          this.lerp(u,this.grad(p[AA],x,y,z),this.grad(p[BA],x-1,y,z)),
+          this.lerp(u,this.grad(p[AB],x,y-1,z),this.grad(p[BB],x-1,y-1,z))
+        ),
+        this.lerp(v,
+          this.lerp(u,this.grad(p[AA+1],x,y,z-1),this.grad(p[BA+1],x-1,y,z-1)),
+          this.lerp(u,this.grad(p[AB+1],x,y-1,z-1),this.grad(p[BB+1],x-1,y-1,z-1))
+        )
+      );
+    }
+  }
+
+  const perlin = new Perlin();
+
+  function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+  function updateNoise(freq, amp, t = 0){
+    const pos = geometry.attributes.position;
+    for (let i = 0; i < pos.count; i++){
+      const x = pos.getX(i), z = pos.getZ(i);
+      const n = perlin.noise((x/10)*freq + t*0.12, (z/10)*freq, 0);
+      pos.setY(i, n * amp * 3.0);
+    }
+    pos.needsUpdate = true;
+
+    const col = geometry.attributes.color;
+    for (let i=0; i<pos.count; i++){
+      const h = clamp01((pos.getY(i) + 2.5) / 5);
+      col.setXYZ(i, 0.22 + 0.55*h, 0.35 + 0.4*h, 0.4 + 0.2*h);
+    }
+    col.needsUpdate = true;
+    geometry.computeVertexNormals();
+  }
+
+  updateNoise(parseFloat(freqEl.value), parseFloat(ampEl.value), 0);
+
+  // UI
+  const refresh = () => updateNoise(parseFloat(freqEl.value), parseFloat(ampEl.value), 0);
+  freqEl.addEventListener('input', refresh);
+  ampEl.addEventListener('input', refresh);
+  wireToggle.addEventListener('change', () => { material.wireframe = wireToggle.checked; });
+
+  // Animation
+  let t = 0;
+  function animate(){
+    requestAnimationFrame(animate);
+    if (animateToggle.checked){
+      t += 0.016;
+      updateNoise(parseFloat(freqEl.value), parseFloat(ampEl.value), t);
+    }
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+</body>
+</html>
