@@ -30,31 +30,27 @@
   
     <!-- Perlin 3D visualization card -->
     <section class="card" aria-labelledby="perlin-title" style="display:grid;gap:12px;margin-top:18px;">
-      <div style="display:flex;gap:16px;align-items:flex-start;">
-        <div style="flex:1;min-width:260px;">
+      <div style="display:flex;gap:16px;align-items:stretch;">
+        <div style="flex:1;min-width:260px;display:flex;flex-direction:column;justify-content:space-between;">
           <h2 id="perlin-title">Perlin Noise — 3D Sandbox</h2>
           <p class="muted" style="margin:6px 0 10px;">
             Interactive 3D demo of Perlin noise used in procedural terrain. Adjust frequency and amplitude to see how the surface responds.
           </p>
-          <ul class="muted" style="margin:0;padding-left:18px;">
-            <li>Rotate & zoom the surface</li>
-            <li>Adjust frequency/amplitude live</li>
-            <li>See color shading tied to height</li>
-          </ul>
+          <div style="display:flex;gap:10px;">
+            <div class="chip-wrapper">
+              <a class="read-more" href="perlin-visualization.html" aria-label="Open Perlin 3D Sandbox">Open Sandbox →</a>
+            </div>
+          </div>
         </div>
-        <div class="card" style="flex:0 0 320px;max-width:100%;padding:12px;display:flex;flex-direction:column;justify-content:center;">
+        <div class="card demo-preview-container">
           <div style="font-weight:600;margin-bottom:6px;">Demo</div>
-          <div style="height:160px;border:1px solid var(--ring,#e5e7eb);border-radius:12px;background:linear-gradient(180deg,#faf7f2,#fff);display:flex;align-items:center;justify-content:center;">
-            <span style="color:var(--muted);font-size:0.95rem;">Perlin — 3D</span>
+          <div class="demo-preview">
+            <span>Perlin — 3D</span>
           </div>
         </div>
       </div>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <div class="chip-wrapper">
-          <a class="read-more" href="perlin-visualization.html" aria-label="Open Perlin 3D Sandbox">Open Sandbox →</a>
-        </div>
-      </div>
+      
     </section>
   </main>
 

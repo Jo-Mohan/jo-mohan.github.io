@@ -417,3 +417,47 @@ footer {
   }
 }
 
+/* Demo preview small-component styles
+   Use these classes to create small interactive demo previews inside cards.
+   The container keeps the existing card padding while the preview itself
+   uses very small top/bottom padding so it sits close to the card's edges. */
+.demo-preview-container {
+  flex: 0 0 420px; /* wider container so the demo preview has more horizontal room */
+  max-width: 100%;
+  padding: 12px; /* keeps a little breathing room inside the parent card */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.demo-preview {
+  flex: 1 1 auto;           /* grow to fill available vertical space */
+  min-height: 220px;       /* larger preview size so the demo box is visually prominent */
+  border: 1px solid var(--ring, #e5e7eb);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #faf7f2, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;       /* small vertical padding but a touch more for larger box */
+  gap: 6px;
+}
+
+.demo-preview span {
+  color: var(--color-muted);
+  font-size: 1rem;
+}
+
+/* Make the demo preview more compact on narrow screens while keeping the larger default on desktop */
+@media (max-width: 560px) {
+  .demo-preview-container {
+    flex: 0 0 100%;
+    padding: 10px;
+  }
+  .demo-preview {
+    min-height: 120px;
+    padding: 4px 8px;
+  }
+}
+
