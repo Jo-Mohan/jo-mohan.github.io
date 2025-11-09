@@ -461,3 +461,30 @@ footer {
   }
 }
 
+/* MathJax / TeX (SVG) responsive rules
+   Make MathJax's SVG output scale to the content width on small screens so
+   display equations don't overflow horizontally. This applies a max-width
+   and automatic height scaling to SVG output and ensures block math centers
+   and fits within the article container. */
+.MathJax_SVG svg,
+.mjx-svg,
+.mjx-svg-href,
+article.card svg,
+.container svg {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+/* block-level math produced by MathJax often sits in a wrapper; ensure the
+   wrapper doesn't force overflow and allows the SVG to scale down. */
+.mjx-block {
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+/* Ensure long inline content can break if needed */
+p, li, .container {
+  overflow-wrap: anywhere;
+}
+
