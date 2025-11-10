@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Visualizations</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" href="/favicon.png" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <link rel="apple-touch-icon" href="/assets/favicon.png" />
 </head>
 <body>
   <header>
@@ -14,11 +14,11 @@
       <div class="logo">Jo&nbsp;Mohan</div>
       <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="visualizations.html" aria-current="page">Visualizations</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="work.html">Work</a></li>
-        <li><a href="graph.html">Knowledge Graph</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/visualizations/" aria-current="page">Visualizations</a></li>
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/work/">Work</a></li>
+  <li><a href="/graph/">Knowledge Graph</a></li>
       </ul>
     </nav>
   </header>
@@ -38,7 +38,7 @@
           </p>
           <div style="display:flex;gap:10px;">
             <div class="chip-wrapper">
-              <a class="read-more" href="perlin-visualization.html" aria-label="Open Perlin 3D Sandbox">Open Sandbox →</a>
+              <a class="read-more" href="/visualizations/perlin-visualization.html" aria-label="Open Perlin 3D Sandbox">Open Sandbox →</a>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
     </a>
 
     <!-- Resume -->
-    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
+  <a href="/assets/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/adobeacrobatreader.svg" 
            alt="Resume" width="24" height="24" style="filter:invert(0);">
     </a>
@@ -85,51 +85,6 @@
 </footer>
 
 
-  <script src="scripts.js"></script>
-
-  <script>
-    // Static Black-Scholes curve for preview
-    (function(){
-      const svgPath = document.getElementById('preview-path');
-      if (!svgPath) return;
-
-      const erf = x => {
-        const s = Math.sign(x); x = Math.abs(x);
-        const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
-        const t=1/(1+p*x);
-        const y=1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
-        return s*y;
-      };
-      const N = x => 0.5*(1+erf(x/Math.SQRT2));
-      const d1 = (S,K,r,sigma,T) => (Math.log(S/K)+(r+0.5*sigma*sigma)*T)/(sigma*Math.sqrt(T));
-      const d2 = (d1v,sigma,T) => d1v - sigma*Math.sqrt(T);
-      const call = (S,K,r,sigma,T) => {
-        const _d1=d1(S,K,r,sigma,T), _d2=d2(_d1,sigma,T);
-        return S*N(_d1) - K*Math.exp(-r*T)*N(_d2);
-      };
-
-      const K=100, r=0.04, sigma=0.30, T=1.0;
-      const Smin=50, Smax=200, steps=60;
-
-      const x0=28, y0=124, w=280, h=112;
-      const xs=[], ys=[];
-      for(let i=0;i<=steps;i++){
-        const S = Smin + (Smax-Smin)*i/steps;
-        xs.push(S);
-        ys.push(call(S,K,r,sigma,T));
-      }
-
-      const yMin = Math.min(...ys), yMax = Math.max(...ys);
-      const X = S => x0 + (S-Smin)/(Smax-Smin)*w;
-      const Y = P => y0 - (P - yMin)/(yMax - yMin || 1)*h;
-
-      let d = "";
-      for(let i=0;i<xs.length;i++){
-        const x = X(xs[i]), y = Y(ys[i]);
-        d += (i===0 ? `M ${x},${y}` : ` L ${x},${y}`);
-      }
-      svgPath.setAttribute('d', d);
-    })();
-  </script>
+  <script src="/assets/scripts.js"></script>
 </body>
 </html>

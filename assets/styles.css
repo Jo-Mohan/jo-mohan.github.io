@@ -1,12 +1,3 @@
-/* Global styles for the student portfolio site.
-   The design draws inspiration from the warm, muted colour palette
-   and soft rounded edges of Anthropic's Claude branding【832974945123559†L88-L103】【832974945123559†L115-L118】.
-   Colours are defined as CSS custom properties to ease customization.
-   The layout is responsive and uses accessible typography, spacing and
-   contrast following digital accessibility guidelines【658675121105025†L116-L132】【658675121105025†L136-L149】.
-*/
-
-/* Box-sizing reset */
 *,
 *::before,
 *::after {
@@ -14,16 +5,15 @@
 }
 
 :root {
-  /* Darker academic blue palette (original but richer blues) */
-  --color-primary: #102A43;    /* deep navy for headings & strong accents */
-  --color-primary-strong: #0B1B2B; /* near-black navy for highest contrast */
-  --color-accent: #1665A3;     /* livelier deep blue for highlights (more pizzaz) */
-  --color-secondary: #2B86D1;  /* brighter secondary for hover states */
-  --color-highlight: #2B6F94;  /* brighter blue for subtle backgrounds */
-  --color-background: #F4F7FA; /* very light cool background */
-  --color-card: #FFFFFF;       /* card background */
-  --color-text: #17364A;      /* dark blue-gray for body text */
-  --color-muted: #4A6C7A;     /* muted bluish secondary text */
+  --color-primary: #102A43;    
+  --color-primary-strong: #0B1B2B; 
+  --color-accent: #1665A3;    
+  --color-secondary: #2B86D1;  
+  --color-highlight: #2B6F94;
+  --color-background: #F4F7FA; 
+  --color-card: #FFFFFF;      
+  --color-text: #17364A;     
+  --color-muted: #4A6C7A;    
   --radius: 8px;
   --transition: 0.28s ease;
 }
@@ -46,7 +36,7 @@ body {
   flex-direction: column;
 }
 
-/* Navbar */
+
 .navbar {
   display: flex;
   align-items: center;
@@ -96,7 +86,6 @@ body {
   color: #ffffff;
 }
 
-/* Mobile nav toggle */
 .nav-toggle {
   display: none;
   font-size: 1.5rem;
@@ -106,7 +95,6 @@ body {
   cursor: pointer;
 }
 
-/* Main content container */
 .container {
   width: 90%;
   max-width: 800px;
@@ -127,7 +115,6 @@ body {
   max-width: 70ch;
 }
 
-/* Cards used on various pages */
 .card {
   background-color: var(--color-card);
   border-radius: var(--radius);
@@ -141,14 +128,12 @@ body {
   margin-top: 0;
 }
 
-/* Meta text styling */
 .meta {
   font-size: 0.875rem;
   color: var(--color-muted);
   margin-bottom: 0.5rem;
 }
 
-/* Gallery styling */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -167,7 +152,6 @@ body {
   transform: scale(1.05);
 }
 
-/* Blog read-more links and project links */
 a.read-more,
 article a {
   color: var(--color-primary);
@@ -185,16 +169,14 @@ article a:focus {
   color: var(--color-accent);
 }
 
-/* Chip wrapper - reusable hover/hover-lift effect for chip-like UI
-   Apply this class to buttons/links that should slightly lift and highlight
-   on hover or focus. Respects prefers-reduced-motion. */
+
 .chip-wrapper {
-  display: inline-block; /* keep size to content */
+  display: inline-block;
   border-radius: 999px;
   transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition), border-color var(--transition);
-  cursor: pointer; /* make it obvious it's clickable */
+  cursor: pointer;
   border: 1px solid transparent;
-  padding: 2px; /* small hit-area boost while preserving internal chip padding */
+  padding: 2px;
 }
 .chip-wrapper:hover,
 .chip-wrapper:focus-within {
@@ -207,7 +189,6 @@ article a:focus {
   transform: translateY(0) scale(0.995);
 }
 
-/* Ensure chip contents keep their existing padding/appearance */
 .chip-wrapper > .chip-btn,
 .chip-wrapper > a.read-more,
 .chip-wrapper > article a {
@@ -215,7 +196,6 @@ article a:focus {
   align-items: center;
 }
 
-/* Accessibility: respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .chip-wrapper {
     transition: none;
@@ -229,14 +209,12 @@ article a:focus {
   }
 }
 
-/* Strong visible focus ring for keyboard users while remaining subtle visually */
 .chip-wrapper:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--color-accent) 72%, white 28%);
   outline-offset: 3px;
   border-color: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
-/* Footer */
 footer {
   text-align: center;
   padding: 1rem;
@@ -246,7 +224,6 @@ footer {
   flex-shrink: 0;
 }
 
-/* Fade-in animation for page load */
 .fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -260,7 +237,6 @@ footer {
   }
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .nav-toggle {
     display: block;
@@ -280,7 +256,6 @@ footer {
     max-height: 0;
     overflow: hidden;
     transition: max-height var(--transition), opacity var(--transition), transform var(--transition);
-    /* start hidden to avoid any visible sliver */
     visibility: hidden;
     opacity: 0;
     transform: translateY(-6px);
@@ -297,18 +272,13 @@ footer {
     transform: translateY(0);
   }
 
-  /* On small screens, hide the full top bar (logo + nav) visually
-     so only the hamburger toggle is visible. The toggle is fixed so
-     users can open the nav when needed. The menu (nav-links) will
-     appear as a floating panel when opened. */
+
   .navbar {
-    /* remove visual chrome so it doesn't occupy vertical space */
     background: transparent;
     box-shadow: none;
     padding: 0;
-    /* ensure the bar doesn't leave a visible strip */
     height: 0;
-    overflow: visible; /* allow the fixed toggle to show */
+    overflow: visible; 
   }
 
   .navbar .logo {
@@ -316,7 +286,6 @@ footer {
   }
 
   .nav-toggle {
-    /* make the toggle easy to reach and always visible */
     position: fixed;
     top: 12px;
     right: 12px;
@@ -327,9 +296,8 @@ footer {
     box-shadow: 0 8px 24px rgba(17,24,39,0.12);
   }
 
-  /* Floating menu panel when opened */
   .nav-links {
-    top: 56px; /* below the fixed toggle */
+    top: 56px;
     right: 12px;
     width: calc(100% - 32px);
     max-width: 320px;
@@ -349,7 +317,6 @@ footer {
   }
 }
 
-/* === Headshot + About section styling === */
 .about-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -372,7 +339,6 @@ footer {
   min-width: 260px;
 }
 
-/* Responsive adjustment */
 @media (max-width: 680px) {
   .about-wrapper {
     flex-direction: column;
@@ -390,7 +356,6 @@ footer {
   }
 }
 
-/* Interactive card: makes the entire card lift and highlight on hover/focus */
 .card.interactive {
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
   will-change: transform;
@@ -417,31 +382,32 @@ footer {
   }
 }
 
-/* Demo preview small-component styles
-   Use these classes to create small interactive demo previews inside cards.
-   The container keeps the existing card padding while the preview itself
-   uses very small top/bottom padding so it sits close to the card's edges. */
+
 .demo-preview-container {
-  flex: 0 0 420px; /* wider container so the demo preview has more horizontal room */
+  flex: 0 0 clamp(240px, 30vw, 420px);
+  min-width: 0; 
   max-width: 100%;
-  padding: 12px; /* keeps a little breathing room inside the parent card */
+  padding: 12px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
+  box-sizing: border-box;
 }
 
 .demo-preview {
-  flex: 1 1 auto;           /* grow to fill available vertical space */
-  min-height: 220px;       /* larger preview size so the demo box is visually prominent */
+  flex: 1 1 auto;
+  min-height: 220px;    
   border: 1px solid var(--ring, #e5e7eb);
   border-radius: 12px;
   background: linear-gradient(180deg, #faf7f2, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;       /* small vertical padding but a touch more for larger box */
+  padding: 6px 10px;
   gap: 6px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .demo-preview span {
@@ -449,7 +415,6 @@ footer {
   font-size: 1rem;
 }
 
-/* Make the demo preview more compact on narrow screens while keeping the larger default on desktop */
 @media (max-width: 560px) {
   .demo-preview-container {
     flex: 0 0 100%;
@@ -461,12 +426,14 @@ footer {
   }
 }
 
-/* MathJax / TeX (SVG) responsive rules
-   Keep display equations centered and preserve paragraph layout. SVG output
-   will scale down to fit the content area (max-width) instead of stretching
-   to full width. On very narrow viewports the SVG will shrink to avoid
-   horizontal overflow while keeping the equation visually centered.
-*/
+.card[aria-labelledby="perlin-title"] > div {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+
 .MathJax_SVG svg,
 .mjx-svg,
 .mjx-svg-href,
@@ -474,13 +441,11 @@ article.card svg,
 .container svg {
   width: auto !important;
   height: auto !important;
-  display: inline-block !important; /* let the SVG size to its intrinsic aspect */
-  margin: 0 auto !important; /* center block math */
+  display: inline-block !important;
+  margin: 0 auto !important;
 }
 
-/* Center block-level math and avoid forcing full-width wrappers. Allow a
-   small horizontal scroll only if absolutely necessary rather than breaking
-   paragraph flow; otherwise the SVG will shrink to fit. */
+
 .mjx-block {
   display: block !important;
   text-align: center !important;
@@ -488,13 +453,10 @@ article.card svg,
   padding: 0.25rem 0 !important;
 }
 
-/* Ensure long inline content can break where needed without breaking words */
 p, li, .container {
   overflow-wrap: anywhere;
 }
 
-/* Aggressive small-screen fallback: let the equation take full width minus
-   a tiny gutter so it remains readable on phones. */
 @media (max-width: 480px) {
   .MathJax_SVG svg,
   .mjx-svg,

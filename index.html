@@ -1,25 +1,14 @@
 <!DOCTYPE html>
-<!--
-  Home page for the student portfolio.
-
-  This document follows semantic HTML5 conventions to make the
-  structure of the page clear to screen readers and search engines.
-  A common navigation bar at the top links to the other sections of
-  the site. The CSS and JavaScript imported below provide the
-  minimalist look and feel inspired by the warm, muted colour palette
-  used in Anthropic's Claude branding【832974945123559†L88-L103】. Rounded corners
-  and soft shadows help achieve an academic yet approachable aesthetic.
--->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/assets/styles.css" />
   <!-- Preload the primary colour as a meta theme-colour for browsers -->
   <meta name="theme-color" content="#C15F3C" />
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/favicon.png">
 </head>
 <body>
   <!-- Site header with navigation. A toggle button is provided for small
@@ -29,11 +18,11 @@
       <div class="logo">Jo&nbsp;Mohan</div>
       <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="visualizations.html">Visualizations</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="work.html">Work</a></li>
-        <li><a href="graph.html">Knowledge Graph</a></li>
+  <li><a href="/">Home</a></li>
+  <li><a href="/visualizations/">Visualizations</a></li>
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/work/">Work</a></li>
+  <li><a href="/graph/">Knowledge Graph</a></li>
       </ul>
       </ul>
     </nav>
@@ -43,7 +32,7 @@
     <div class="about-wrapper">
       <!-- Headshot -->
       <img
-        src="IMG_0100.JPG"
+        src="/assets/IMG_0100.JPG"
         alt="Portrait of Jo Mohan"
         class="headshot"
       />
@@ -65,9 +54,9 @@
         <p>
           <b>News:</b><br />
           <i>06/2026:</i> I'll be joining Geneva Trading as a Quantitative Trading Intern! <br /><br />
-          <i>01/2026</i> I'll be joining Stripe as a SWE Intern in the bay for next semester. <br /><br />
+          <i>01/2026:</i> I'll be joining Stripe as a SWE Intern in the bay for next semester. <br /><br />
           <i>10/2025:</i> I recently published a blog post on Procedural Generation. Check it out on the
-          <a href="blog.html">Blog</a> page!
+          <a href="/blog/">Blog</a> page!
         </p>
       </div>
     </div>
@@ -96,7 +85,7 @@
     </a>
 
     <!-- Resume -->
-    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
+  <a href="/assets/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/adobeacrobatreader.svg" 
            alt="Resume" width="24" height="24" style="filter:invert(0);">
     </a>
@@ -104,7 +93,7 @@
   </nav>
 </footer>
 
-  <script src="scripts.js"></script>
+  <script src="/assets/scripts.js"></script>
   <!-- Chart.js is only used on pages that include a chart. Including it
        here ensures it’s cached across pages without blocking rendering. -->
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
