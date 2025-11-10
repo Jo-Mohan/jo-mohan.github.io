@@ -8,7 +8,6 @@
   <link rel="icon" type="image/png" href="/assets/favicon.png" />
   <link rel="apple-touch-icon" href="/assets/favicon.png" />
   <style>
-    /* Page-local styles that work with your existing theme */
     .viz-card {
       position: relative;
       background: var(--card, #fff);
@@ -16,7 +15,7 @@
       border-radius: 16px;
       box-shadow: 0 10px 20px rgba(17,24,39,0.06);
       overflow: hidden;
-      padding: 0; /* graph is full-bleed inside the card */
+      padding: 0;
     }
     .viz-head {
       display: flex;
@@ -28,11 +27,10 @@
     }
     .viz-meta { color: var(--muted, #6b7280); margin: 0; }
 
-    /* Graph canvas area inside the card */
     #graph {
       width: 100%;
-      height: min(72vh, 820px);  /* responsive height */
-      background: #1a1a1a;       /* same as your original */
+      height: min(72vh, 820px); 
+      background: #1a1a1a;
     }
 
     .viz-actions {
@@ -54,7 +52,6 @@
     .chip-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
     .chip-btn:focus-visible { outline: 2px solid #8a5cec; outline-offset: 2px; }
 
-    /* Hide “Back” if embedded in an iframe */
     body.embedded .back-chip { display: none; }
   </style>
 </head>
@@ -84,7 +81,6 @@
         <h2 id="viz-title">Obsidian Network</h2>
       </div>
 
-      <!-- Action chips -->
       <div class="viz-actions" role="group" aria-label="Graph actions">
         <div class="chip-wrapper">
           <button class="chip-btn" id="expand-btn" title="Open in new tab" aria-label="Open in new tab">
@@ -94,7 +90,6 @@
         </div>
       </div>
 
-      <!-- Graph canvas -->
       <div id="graph" role="img" aria-label="Force-directed graph of Obsidian notes"></div>
     </section>
   </main>
@@ -102,25 +97,21 @@
 <footer>
   <nav class="social" aria-label="Social links" style="display:flex;justify-content:center;gap:18px;padding:16px 0;">
     
-    <!-- LinkedIn -->
     <a href="https://www.linkedin.com/in/jotishwar-mohan" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" 
            alt="LinkedIn" width="24" height="24" style="filter:invert(0);">
     </a>
 
-    <!-- GitHub -->
     <a href="https://github.com/Jo-Mohan" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" 
            alt="GitHub" width="24" height="24" style="filter:invert(0);">
     </a>
 
-    <!-- Email -->
     <a href="mailto:jomohan1155@gmail.com" aria-label="Email">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" 
            alt="Email" width="24" height="24" style="filter:invert(0);">
     </a>
 
-    <!-- Resume -->
   <a href="/assets/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/adobeacrobatreader.svg" 
            alt="Resume" width="24" height="24" style="filter:invert(0);">
@@ -132,12 +123,10 @@
 
   <script src="/assets/scripts.js"></script>
 
-  <!-- libs (same as your original) -->
   <script src="https://unpkg.com/force-graph"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <script>
-    // Keep your iframe-detection behavior
     if (window.self !== window.top) {
       document.body.classList.add('embedded');
     }
@@ -157,14 +146,12 @@
     const HIGHLIGHT_LINK_COLOR = '#8a5cec';
     const TEXT_COLOR = '#cccccc';
 
-    // Use your current JSON location; change if you move it later.
   fetch('/graph-data.json', { cache: 'no-store' })
       .then(res => {
         if (!res.ok) throw new Error('Failed to load graph data');
         return res.json();
       })
       .then(data => {
-        // Make the graph fill the card area
         const resize = () => {
           const rect = graphElement.getBoundingClientRect();
           Graph.width(rect.width).height(rect.height);
@@ -211,7 +198,6 @@
             highlightLinks.clear();
 
             if (node) {
-              // handle both id-or-object link endpoints
               data.links.forEach(link => {
                 const src = typeof link.source === 'object' ? link.source.id : link.source;
                 const tgt = typeof link.target === 'object' ? link.target.id : link.target;
@@ -221,10 +207,8 @@
             graphElement.style.cursor = node ? 'pointer' : 'default';
           });
 
-        // Fit once the layout stabilizes
         Graph.onEngineStop(() => Graph.zoomToFit(400, 80));
 
-        // Keep responsive sizing inside the card
         window.addEventListener('resize', resize);
         resize();
       })
