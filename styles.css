@@ -462,29 +462,45 @@ footer {
 }
 
 /* MathJax / TeX (SVG) responsive rules
-   Make MathJax's SVG output scale to the content width on small screens so
-   display equations don't overflow horizontally. This applies a max-width
-   and automatic height scaling to SVG output and ensures block math centers
-   and fits within the article container. */
+   Keep display equations centered and preserve paragraph layout. SVG output
+   will scale down to fit the content area (max-width) instead of stretching
+   to full width. On very narrow viewports the SVG will shrink to avoid
+   horizontal overflow while keeping the equation visually centered.
+*/
 .MathJax_SVG svg,
 .mjx-svg,
 .mjx-svg-href,
 article.card svg,
 .container svg {
-  max-width: 100% !important;
+  width: auto !important;
   height: auto !important;
-  display: block !important;
+  display: inline-block !important; /* let the SVG size to its intrinsic aspect */
+  margin: 0 auto !important; /* center block math */
 }
 
-/* block-level math produced by MathJax often sits in a wrapper; ensure the
-   wrapper doesn't force overflow and allows the SVG to scale down. */
+/* Center block-level math and avoid forcing full-width wrappers. Allow a
+   small horizontal scroll only if absolutely necessary rather than breaking
+   paragraph flow; otherwise the SVG will shrink to fit. */
 .mjx-block {
-  width: 100% !important;
-  overflow: visible !important;
+  display: block !important;
+  text-align: center !important;
+  overflow-x: auto !important;
+  padding: 0.25rem 0 !important;
 }
 
-/* Ensure long inline content can break if needed */
+/* Ensure long inline content can break where needed without breaking words */
 p, li, .container {
   overflow-wrap: anywhere;
+}
+
+/* Aggressive small-screen fallback: let the equation take full width minus
+   a tiny gutter so it remains readable on phones. */
+@media (max-width: 480px) {
+  .MathJax_SVG svg,
+  .mjx-svg,
+  article.card svg,
+  .container svg {
+    max-width: 100% !important;
+  }
 }
 
