@@ -114,11 +114,10 @@
 
  <script type="module">
   import * as THREE from 'three';
-  import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/controls/OrbitControls.js';
 
   const root = document.getElementById('canvas-root');
-  const freqEl = document.getElementById('freq');
-  const ampEl = document.getElementById('amp');
+  const perlFreq = document.getElementById('freq');
+  const perlAmp = document.getElementById('amp');
   const wireToggle = document.getElementById('wireToggle');
   const animateToggle = document.getElementById('animateToggle');
 
@@ -140,7 +139,7 @@
   function syncSize() {
     const rect = root.getBoundingClientRect();
     const w = Math.max(1, Math.floor(rect.width));
-  const h = Math.max(1, Math.floor(rect.height * 0.85));
+    const h = Math.max(1, Math.floor(rect.height * 0.85));
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
@@ -150,11 +149,6 @@
   window.addEventListener('resize', syncSize);
 
   
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enabled = false;
-
-
-  
   const hemi = new THREE.HemisphereLight(0xffffff, 0x334155, 0.8);
   const dir = new THREE.DirectionalLight(0xffffff, 0.8);
   dir.position.set(25, 60, 20);
@@ -162,7 +156,7 @@
 
   
   const size = 50;
-  const segments = 150;
+  const segments = 300;
   const geometry = new THREE.PlaneGeometry(size, size, segments, segments);
   geometry.rotateX(-Math.PI / 2);
   const colors = new Float32Array(geometry.attributes.position.count * 3);
@@ -243,11 +237,11 @@
     geometry.computeVertexNormals();
   }
 
-  updateNoise(parseFloat(freqEl.value), parseFloat(ampEl.value), 0);
+  updateNoise(parseFloat(perlFreq.value), parseFloat(perlAmp.value), 0);
 
-  const refresh = () => updateNoise(parseFloat(freqEl.value), parseFloat(ampEl.value), 0);
-  freqEl.addEventListener('input', refresh);
-  ampEl.addEventListener('input', refresh);
+  const refresh = () => updateNoise(parseFloat(perlFreq.value), parseFloat(perlAmp.value), 0);
+  perlFreq.addEventListener('input', refresh);
+  perlAmp.addEventListener('input', refresh);
   wireToggle.addEventListener('change', () => { material.wireframe = wireToggle.checked; });
 
   
@@ -255,10 +249,9 @@
   function animate(){
     requestAnimationFrame(animate);
     if (animateToggle.checked){
-      t += 0.016;
-      updateNoise(parseFloat(freqEl.value), parseFloat(ampEl.value), t);
+      t += 0.1;
+      updateNoise(parseFloat(perlFreq.value), parseFloat(perlAmp.value), t);
     }
-    controls.update();
     renderer.render(scene, camera);
   }
   animate();
