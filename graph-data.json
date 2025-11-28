@@ -19,6 +19,9 @@
       "id": "Chains and Antichains.md"
     },
     {
+      "id": "Covariance.md"
+    },
+    {
       "id": "Gradient Noise.md"
     },
     {
@@ -29,6 +32,9 @@
     },
     {
       "id": "Combinations (R-Combinations).md"
+    },
+    {
+      "id": "Spurious Correlation.md"
     },
     {
       "id": "Grinold's Law.md"
@@ -47,6 +53,9 @@
     },
     {
       "id": "Insertion Algorithms.md"
+    },
+    {
+      "id": "Market Microstructure Signals.md"
     },
     {
       "id": "Autoregressive Models.md"
@@ -73,6 +82,12 @@
       "id": "Equivalence Classes.md"
     },
     {
+      "id": "Ledoit-Wolf Shrinkage.md"
+    },
+    {
+      "id": "Order Book.md"
+    },
+    {
       "id": "Quantitative Finance.md"
     },
     {
@@ -91,6 +106,10 @@
       "target": "PageRank Algorithm.md"
     },
     {
+      "source": "Covariance.md",
+      "target": "Quantitative Finance.md"
+    },
+    {
       "source": "Gradient Noise.md",
       "target": "Perlin Noise.md"
     },
@@ -105,6 +124,10 @@
     {
       "source": "Perlin Noise.md",
       "target": "Procedural Generation.md"
+    },
+    {
+      "source": "Spurious Correlation.md",
+      "target": "Quantitative Finance.md"
     },
     {
       "source": "Grinold's Law.md",
@@ -163,6 +186,10 @@
       "target": "Gray Codes.md"
     },
     {
+      "source": "Market Microstructure Signals.md",
+      "target": "Order Book.md"
+    },
+    {
       "source": "Autoregressive Models.md",
       "target": "Quantitative Finance.md"
     },
@@ -185,6 +212,10 @@
     {
       "source": "Relations and Order Structures.md",
       "target": "Lattices.md"
+    },
+    {
+      "source": "Order Book.md",
+      "target": "Quantitative Finance.md"
     }
   ]
 }
