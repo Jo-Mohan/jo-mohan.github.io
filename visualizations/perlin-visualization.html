@@ -194,7 +194,7 @@
       ];
       for (let i = 0; i < 256; i++) this.p[256 + i] = this.p[i] = perm[i];
     }
-    fade(t){ return t*t*t*(t*(t*6-15)+10); }
+    fade(t){ return 35 * t**4 - 84 * t**5 + 70 * t**6 - 20 * t**7; }
     lerp(t,a,b){ return a + t*(b-a); }
     grad(h,x,y,z){ const hh=h&15,u=hh<8?x:y,v=hh<4?y:(hh===12||hh===14?x:z);return ((hh&1)?-u:u)+((hh&2)?-v:v);}
     noise(x,y,z=0){
@@ -224,7 +224,7 @@
     for (let i = 0; i < pos.count; i++){
       const x = pos.getX(i), z = pos.getZ(i);
       const n = perlin.noise((x/10)*freq + t*0.12, (z/10)*freq, 0);
-      pos.setY(i, n * amp * 3.0);
+      pos.setY(i, n * amp * 5.0);
     }
     pos.needsUpdate = true;
 
